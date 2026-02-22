@@ -1,0 +1,278 @@
+﻿<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>ضایع | بازارچه ضایعات</title>
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div>
+          <h1>ضایع</h1>
+          <p>بازارچه ضایعات با آگهی‌های خرید و فروش</p>
+        </div>
+        <button class="primary" id="cta-new">ثبت آگهی</button>
+      </header>
+
+      <section class="search-panel">
+        <div class="field">
+          <label>جستجو</label>
+          <input id="q" type="search" placeholder="مثلاً ضایعات پت" />
+        </div>
+        <div class="field">
+          <label>نوع آگهی</label>
+          <select id="type">
+            <option value="">همه</option>
+            <option value="buy">خرید</option>
+            <option value="sell">فروش</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>استان</label>
+          <input id="province" type="text" placeholder="تهران" />
+        </div>
+        <div class="field">
+          <label>شهر</label>
+          <input id="city" type="text" placeholder="تهران" />
+        </div>
+        <div class="field">
+          <label>حداقل قیمت</label>
+          <input id="min_price" type="number" placeholder="تومان" />
+        </div>
+        <div class="field">
+          <label>حداکثر قیمت</label>
+          <input id="max_price" type="number" placeholder="تومان" />
+        </div>
+        <div class="field">
+          <label>حداقل وزن</label>
+          <input id="min_weight" type="number" placeholder="مثلاً 1" />
+        </div>
+        <div class="field">
+          <label>حداکثر وزن</label>
+          <input id="max_weight" type="number" placeholder="مثلاً 100" />
+        </div>
+        <div class="actions">
+          <button class="secondary" id="reset">پاک کردن</button>
+          <button class="primary" id="search">جستجو</button>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header">
+          <h2>آگهی‌های جدید</h2>
+          <span id="list-count">...</span>
+        </div>
+        <div id="listings" class="grid"></div>
+      </section>
+    </div>
+
+    <nav class="bottom-nav" aria-label="navigation">
+      <button class="nav-item" type="button">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 10.5L12 4l8 6.5v8.5a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="nav-label">خانه</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M11 4a7 7 0 1 1 4.4 12.4l3.6 3.6-1.4 1.4-3.6-3.6A7 7 0 0 1 11 4zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="nav-label">جستجو</span>
+      </button>
+      <button class="nav-item primary-nav" type="button" id="nav-create">
+        <span class="nav-icon plus">+</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H6a2 2 0 0 1-2-2z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="nav-label">چت</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="nav-label">پروفایل</span>
+      </button>
+    </nav>
+
+    <dialog id="auth-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3>ورود</h3>
+          <button id="auth-close">✕</button>
+        </header>
+        <form id="auth-form" class="form-grid">
+          <div class="field">
+            <label>شماره تلفن</label>
+            <input id="auth-phone" type="tel" placeholder="09xxxxxxxxx" required />
+          </div>
+          <div class="field">
+            <label>رمز عبور</label>
+            <input id="auth-password" type="password" required />
+          </div>
+          <div class="actions">
+            <button class="secondary" type="button" id="auth-cancel">انصراف</button>
+            <button class="primary" type="submit">ورود</button>
+          </div>
+        </form>
+        <p class="hint">برای ثبت آگهی ابتدا وارد شوید.</p>
+      </div>
+    </dialog>
+
+    <dialog id="create-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3>ثبت آگهی جدید</h3>
+          <button id="create-close">✕</button>
+        </header>
+        <form id="create-form" class="form-grid">
+          <div class="field">
+            <label>نوع آگهی</label>
+            <select id="create-type" required>
+              <option value="sell">فروش</option>
+              <option value="buy">خرید</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>عنوان</label>
+            <input id="create-title" type="text" required />
+          </div>
+          <div class="field full">
+            <label>دسته‌بندی</label>
+            <div class="category-select">
+              <input id="category-display" type="text" placeholder="انتخاب دسته‌بندی" readonly />
+              <button class="secondary" type="button" id="category-open">انتخاب</button>
+            </div>
+            <input id="category-level2-id" type="hidden" />
+            <input id="category-level3-id" type="hidden" />
+          </div>
+          <div class="field">
+            <label>وزن</label>
+            <input id="create-weight" type="number" step="0.001" required />
+          </div>
+          <div class="field">
+            <label>واحد وزن</label>
+            <select id="create-weight-unit" required>
+              <option value="ton">تن</option>
+              <option value="kg">کیلوگرم</option>
+              <option value="piece">عدد</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>قیمت</label>
+            <input id="create-price" type="number" step="0.01" />
+          </div>
+          <div class="field">
+            <label>واحد قیمت</label>
+            <select id="create-price-unit" required>
+              <option value="toman_per_ton">تومان / تن</option>
+              <option value="toman_per_kg">تومان / کیلو</option>
+              <option value="toman_per_piece">تومان / عدد</option>
+              <option value="toman_per_ampere">تومان / آمپر</option>
+              <option value="negotiable">توافقی</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>استان</label>
+            <input id="create-province" type="text" required />
+          </div>
+          <div class="field">
+            <label>شهر</label>
+            <input id="create-city" type="text" required />
+          </div>
+          <div class="field full">
+            <label>توضیحات</label>
+            <textarea id="create-description" rows="3"></textarea>
+          </div>
+          <div class="field full">
+            <label>تصاویر آگهی</label>
+            <input id="create-images" type="file" accept="image/*" multiple />
+            <div id="image-preview" class="image-preview"></div>
+          </div>
+          <div class="actions">
+            <button class="secondary" type="button" id="create-cancel">انصراف</button>
+            <button class="primary" type="submit">ثبت آگهی</button>
+          </div>
+        </form>
+        <p class="hint">آپلود عکس بعد از ثبت آگهی از طریق پنل آگهی قابل اضافه شدن است.</p>
+      </div>
+    </dialog>
+
+    <dialog id="category-dialog">
+      <div class="dialog-content">
+        <header class="category-header">
+          <button class="secondary" type="button" id="category-back">بازگشت</button>
+          <h3>انتخاب دسته‌بندی</h3>
+          <button id="category-close">✕</button>
+        </header>
+        <div id="category-path" class="category-path">...</div>
+        <ul id="category-list" class="category-list"></ul>
+      </div>
+    </dialog>
+
+    <template id="listing-card">
+      <article class="card">
+        <img class="thumb" alt="" />
+        <div class="card-body">
+          <h3 class="title"></h3>
+          <p class="meta"></p>
+          <p class="price"></p>
+        </div>
+        <div class="card-actions">
+          <button class="secondary view">مشاهده</button>
+        </div>
+      </article>
+    </template>
+
+    <dialog id="listing-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3 id="dialog-title"></h3>
+          <button id="dialog-close">✕</button>
+        </header>
+        <div id="dialog-images" class="dialog-images"></div>
+        <p id="dialog-meta"></p>
+        <p id="dialog-price"></p>
+        <p id="dialog-description"></p>
+        <div class="dialog-actions">
+          <button class="secondary" id="contact">اطلاعات تماس</button>
+          <button class="primary" id="chat">چت با آگهی‌دهنده</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="chat-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3>چت</h3>
+          <button id="chat-close">✕</button>
+        </header>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" type="text" placeholder="پیام خود را بنویسید..." />
+          <button class="primary" type="submit">ارسال</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="toast-dialog" class="toast-dialog">
+      <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

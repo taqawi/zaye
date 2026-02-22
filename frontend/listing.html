@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>نمایش آگهی | ضایع</title>
+  </head>
+  <body>
+    <div class="app listing-page">
+      <header class="app-header">
+        <div>
+          <h1>نمایش آگهی</h1>
+          <p id="detail-title">...</p>
+        </div>
+        <a class="secondary" href="/index.html">بازگشت</a>
+      </header>
+
+      <section class="listing-hero">
+        <div class="slider">
+          <button id="slide-prev" class="secondary" type="button">‹</button>
+          <img id="slide-image" alt="" />
+          <button id="slide-next" class="secondary" type="button">›</button>
+        </div>
+        <div id="slide-dots" class="slide-dots"></div>
+      </section>
+
+      <section class="listing-details">
+        <div class="detail-card">
+          <h2 id="detail-heading">...</h2>
+          <p id="detail-meta"></p>
+          <p id="detail-price"></p>
+          <p id="detail-description"></p>
+          <div class="dialog-actions">
+            <button class="secondary" id="detail-contact">اطلاعات تماس</button>
+            <button class="primary" id="detail-chat">چت با آگهی‌دهنده</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <dialog id="auth-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3>ورود</h3>
+          <button id="auth-close">✕</button>
+        </header>
+        <form id="auth-form" class="form-grid">
+          <div class="field">
+            <label>شماره تلفن</label>
+            <input id="auth-phone" type="tel" placeholder="09xxxxxxxxx" required />
+          </div>
+          <div class="field">
+            <label>رمز عبور</label>
+            <input id="auth-password" type="password" required />
+          </div>
+          <div class="actions">
+            <button class="secondary" type="button" id="auth-cancel">انصراف</button>
+            <button class="primary" type="submit">ورود</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="chat-dialog">
+      <div class="dialog-content">
+        <header>
+          <h3>چت</h3>
+          <button id="chat-close">✕</button>
+        </header>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" type="text" placeholder="پیام خود را بنویسید..." />
+          <button class="primary" type="submit">ارسال</button>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="toast-dialog" class="toast-dialog">
+      <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    </dialog>
+
+    <script src="/listing.js"></script>
+  </body>
+</html>

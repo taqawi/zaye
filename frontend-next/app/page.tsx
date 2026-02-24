@@ -342,8 +342,12 @@ export default function HomePage() {
             </ul>
           </div>
           <div className="sidebar-section">
-            <h4>محله</h4>
-            <button className="link" type="button">انتخاب</button>
+            <h4>نوع آگهی</h4>
+            <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
+              <option value="">همه</option>
+              <option value="buy">خرید</option>
+              <option value="sell">فروش</option>
+            </select>
           </div>
           <div className="sidebar-section">
             <h4>قیمت (تومان)</h4>
@@ -359,16 +363,8 @@ export default function HomePage() {
               <input placeholder="تا" value={filters.max_weight} onChange={(e) => setFilters({ ...filters, max_weight: e.target.value })} />
             </div>
           </div>
-          <div className="sidebar-section">
-            <h4>نوع آگهی</h4>
-            <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
-              <option value="">همه</option>
-              <option value="buy">خرید</option>
-              <option value="sell">فروش</option>
-            </select>
-          </div>
           <div className="actions">
-            <button className="secondary" type="button" onClick={() => setFilters({ q: "", type: "", province: "", city: "", min_price: "", max_price: "", min_weight: "", max_weight: "" })}>
+            <button className="secondary" type="button" onClick={() => setFilters({ q: "", type: "", province: "", city: "", min_price: "", max_price: "", min_weight: "", max_weight: "", category_level2: "", category_level3: "" })}>
               پاک کردن
             </button>
           </div>
